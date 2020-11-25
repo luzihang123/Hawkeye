@@ -249,7 +249,7 @@ def update_rate_remain():
         github_username = account.get('username')
         github_password = account.get('password')
         try:
-            g = Github(github_username, github_password)
+            g = Github(github_username)
             github_col.update_one({'username': github_username},
                                   {'$set': {'rate_remaining': int(g.get_rate_limit().search.remaining),
                                             'rate_limit': int(g.get_rate_limit().search.limit)}})
@@ -266,7 +266,7 @@ def new_github():
     github_account = random.choice(list(github_col.find({"rate_limit": {"$gt": 5}}).sort('rate_remaining', DESCENDING)))
     github_username = github_account.get('username')
     github_password = github_account.get('password')
-    g = Github(github_username, github_password)
+    g = Github(github_username)
     return g, github_username
 
 
@@ -298,7 +298,7 @@ def check():
                 rate_remaining = github_account.get('rate_remaining')
                 logger.info(github_username)
                 logger.info(rate_remaining)
-                g = Github(github_username, github_password,
+                g = Github(github_username,
                            user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36')
                 search.schedule(args=(query, p, g, github_username),
                                 delay=huey.pending_count() + huey.scheduled_count())

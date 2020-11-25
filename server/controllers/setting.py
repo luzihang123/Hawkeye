@@ -73,7 +73,7 @@ class GithubAccount(Resource):
         username = args.get('username')
         password = args.get('password')
         try:
-            g = Github(username, password)
+            g = Github(username)
             github_col.save({'_id': md5(username), 'username': username, 'password': password,
                              'mask_password': password.replace(''.join(password[2:-2]), '****'), 'addat': timestamp(),
                              'rate_limit': int(g.get_rate_limit().search.limit),
